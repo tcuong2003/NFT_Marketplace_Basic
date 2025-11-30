@@ -2,16 +2,16 @@ import Navbar from "./Navbar";
 import { useLocation, useParams } from 'react-router-dom';
 import MarketplaceJSON from "../Marketplace.json";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NFTTile from "./NFTTile";
-
 export default function Profile () {
+
     const [data, updateData] = useState([]);
     const [dataFetched, updateFetched] = useState(false);
     const [address, updateAddress] = useState("0x");
     const [totalPrice, updateTotalPrice] = useState("0");
 
-    async function getNFTData(tokenId) {
+    async function getNFTData() {
         const ethers = require("ethers");
         let sumPrice = 0;
         //After adding your Hardhat network to your metamask, this code will get providers and signers
@@ -24,7 +24,7 @@ export default function Profile () {
 
         //create an NFT Token
         let transaction = await contract.getMyNFTs()
-
+        console.log("NFTs fetched from contract:", transaction);
         /*
         * Below function takes the metadata from tokenURI and the data returned by getMyNFTs() contract function
         * and creates an object of information that is to be displayed
@@ -57,11 +57,14 @@ export default function Profile () {
 
     const params = useParams();
     const tokenId = params.tokenId;
-    if(!dataFetched)
-        getNFTData(tokenId);
+    useEffect(() => {
+        if (!dataFetched) getNFTData();
+    }, [dataFetched]);
+    // if(!dataFetched)
+    //     getNFTData(tokenId);
 
     return (
-        <div className="profileClass" style={{"min-height":"100vh"}}>
+        <div className="profileClass" style={{minHeight:"100vh"}}>
             <Navbar></Navbar>
             <div className="profileClass">
             <div className="flex text-center flex-col mt-11 md:text-2xl text-white">

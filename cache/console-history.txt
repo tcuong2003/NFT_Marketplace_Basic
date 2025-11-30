@@ -1,4 +1,0 @@
-:wq
-q
-await Marketplace.getAllNFTs();
-const Marketplace = await ethers.getContractAt("NFTMarketplace", "ĐỊA_CHỈ_CONTRACT");
